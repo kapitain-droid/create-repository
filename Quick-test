@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Type Test</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Vibe Type Test</h1>
+        </header>
+
+        <main>
+            <section class="typing-section">
+                <div class="text-display" id="sampleText">
+                    The quick brown fox jumps over the lazy dog. Start typing to begin the test!
+                </div>
+                
+                <textarea 
+                    class="input-area" 
+                    id="typingInput" 
+                    placeholder="Start typing the text above... (timer starts automatically)"
+                    autofocus
+                ></textarea>
+            </section>
+
+            <section class="stats-section">
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-value" id="timer">0</span>
+                        <span class="stat-label">Seconds</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="wpm">0</span>
+                        <span class="stat-label">WPM</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="accuracy">0</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="controls-section">
+                <button id="resetBtn" class="btn btn-primary">Reset Test</button>
+                <button id="newTextBtn" class="btn btn-secondary">New Text</button>
+            </section>
+
+            <section class="instructions">
+                <div class="instruction-item">
+                    <strong>How to use:</strong> Start typing in the text area above. The timer begins automatically.
+                </div>
+                <div class="instruction-item">
+                    <strong>Colors:</strong> 
+                    <span class="color-sample correct-sample">Green = correct</span>, 
+                    <span class="color-sample incorrect-sample">Red = incorrect</span>, 
+                    <span class="color-sample current-sample">Blue = current position</span>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+main {
+    padding: 30px;
+}
+
+.typing-section {
+    margin-bottom: 30px;
+}
+
+.text-display {
+    background: #f8fafc;
+    padding: 25px;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    min-height: 150px;
+    transition: all 0.3s ease;
+}
+
+.input-area {
+    width: 100%;
+    height: 120px;
+    padding: 20px;
+    font-size: 1.1rem;
+    border: 2px solid #d1d5db;
+    border-radius: 10px;
+    resize: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: all 0.3s ease;
+}
+
+.input-area:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.stats-section {
+    margin-bottom: 30px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    padding: 25px 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+}
+
+.stat-value {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.controls-section {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.btn {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.instructions {
+    background: #f1f5f9;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #4f46e5;
+}
+
+.instruction-item {
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.instruction-item:last-child {
+    margin-bottom: 0;
+}
+
+.color-sample {
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 0 5px;
+    font-weight: 500;
+}
+
+.correct-sample {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.incorrect-sample {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.current-sample {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+/* Character highlighting styles */
+.text-display span {
+    transition: all 0.2s ease;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin: 0 1px;
+}
+
+.text-display span.correct {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.text-display span.incorrect {
+    background-color: #fee2e2;
+    color: #dc2626;
+    text-decoration: underline;
+}
+
+.text-display span.current {
+    background-color: #3b82f6;
+    color: white;
+    box-shadow: 0 0 0 2px #3b82f6;
+}
+
+.input-area:disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+    border-color: #9ca3af;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    main {
+        padding: 20px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .stats {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .controls-section {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    .text-display {
+        font-size: 1.1rem;
+        padding: 20px;
+    }
+    
+    .input-area {
+        font-size: 1rem;
+        padding: 15px;
+    }
+}
+
+/* Animation for completed test */
+@keyframes celebrate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.celebrate {
+    animation: celebrate 0.5s ease-in-out;
+}
+
+
+
+// Vibe Type Test - JavaScript
+const sampleText = document.getElementById('sampleText');
+const typingInput = document.getElementById('typingInput');
+const timerDisplay = document.getElementById('timer');
+const wpmDisplay = document.getElementById('wpm');
+const accuracyDisplay = document.getElementById('accuracy');
+const resetBtn = document.getElementById('resetBtn');
+const newTextBtn = document.getElementById('newTextBtn');
+
+let startTime;
+let timerInterval;
+let isRunning = false;
+
+// Sample texts for the typing test
+const sampleTexts = [
+    "The quick brown fox jumps over the lazy dog. Programming is fun when you vibe with it.",
+    "Hello world! This is a typing speed test. Practice makes perfect, so keep typing away.",
+    "JavaScript is the language of the web. Building projects is the best way to learn coding skills.",
+    "Vibe coding means building iteratively and having fun while creating something useful.",
+    "Typing fast and accurately is a valuable skill in today's digital world. Keep practicing!",
+    "The best way to learn programming is by building real projects and solving actual problems.",
+    "Consistent practice improves your typing speed and accuracy over time. Don't give up!",
+    "Web development combines creativity with technical skills to build amazing applications."
+];
+
+// Initialize the typing test
+function initTypingTest() {
+    const randomText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
+    sampleText.innerHTML = '';
+    
+    // Create spans for each character
+    randomText.split('').forEach(char => {
+        const span = document.createElement('span');
+        span.textContent = char;
+        sampleText.appendChild(span);
+    });
+    
+    // Reset all values
+    typingInput.value = '';
+    typingInput.disabled = false;
+    clearInterval(timerInterval);
+    isRunning = false;
+    timerDisplay.textContent = '0';
+    wpmDisplay.textContent = '0';
+    accuracyDisplay.textContent = '0';
+    
+    // Focus on input
+    typingInput.focus();
+}
+
+// Start timer on first keypress
+typingInput.addEventListener('input', function() {
+    if (!isRunning && this.value.length > 0) {
+        startTime = new Date();
+        isRunning = true;
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+    highlightCharacters();
+    calculateStats();
+});
+
+// Update timer display
+function updateTimer() {
+    const currentTime = new Date();
+    const elapsed = Math.floor((currentTime - startTime) / 1000);
+    timerDisplay.textContent = elapsed;
+}
+
+// Highlight characters based on user input
+function highlightCharacters() {
+    const typedText = typingInput.value;
+    const characterSpans = sampleText.querySelectorAll('span');
+    
+    characterSpans.forEach((span, index) => {
+        span.className = '';
+        
+        if (index < typedText.length) {
+            if (typedText[index] === span.textContent) {
+                span.classList.add('correct');
+            } else {
+                span.classList.add('incorrect');
+            }
+        }
+        
+        if (index === typedText.length) {
+            span.classList.add('current');
+        }
+    });
+}
+
+// Calculate typing statistics
+function calculateStats() {
+    const typedText = typingInput.value;
+    const originalText = sampleText.textContent;
+    
+    // Calculate accuracy
+    let correctChars = 0;
+    for (let i = 0; i < typedText.length; i++) {
+        if (typedText[i] === originalText[i]) {
+            correctChars++;
+        }
+    }
+    
+    const accuracy = typedText.length > 0 ? Math.round((correctChars / typedText.length) * 100) : 0;
+    accuracyDisplay.textContent = accuracy;
+
+    // Calculate WPM (words per minute)
+    const timeInMinutes = (new Date() - startTime) / 60000;
+    const words = typedText.length / 5; // Standard: 5 characters = 1 word
+    const wpm = timeInMinutes > 0 ? Math.round(words / timeInMinutes) : 0;
+    wpmDisplay.textContent = wpm;
+
+    // Check if test is completed
+    if (typedText.length === originalText.length) {
+        completeTest(accuracy);
+    }
+}
+
+// Handle test completion
+function completeTest(accuracy) {
+    clearInterval(timerInterval);
+    typingInput.disabled = true;
+    
+    // Add celebration effect
+    sampleText.classList.add('celebrate');
+    
+    // Show results message
+    let message = '';
+    if (accuracy >= 95) {
+        message = `🎉 Outstanding! ${accuracy}% accuracy - You're a typing master!`;
+    } else if (accuracy >= 85) {
+        message = `👍 Excellent work! ${accuracy}% accuracy - Very impressive!`;
+    } else if (accuracy >= 70) {
+        message = `👏 Good job! ${accuracy}% accuracy - Keep practicing!`;
+    } else {
+        message = `✍️ Completed! ${accuracy}% accuracy - Don't give up, practice makes perfect!`;
+    }
+    
+    sampleText.innerHTML = message;
+    
+    // Remove celebration class after animation
+    setTimeout(() => {
+        sampleText.classList.remove('celebrate');
+    }, 1000);
+}
+
+// Event listeners for buttons
+resetBtn.addEventListener('click', initTypingTest);
+newTextBtn.addEventListener('click', initTypingTest);
+
+// Initialize the test when page loads
+document.addEventListener('DOMContentLoaded', initTypingTest);
+
+// Prevent paste in typing input (for accurate testing)
+typingInput.addEventListener('paste', function(e) {
+    e.preventDefault();
+    alert('Pasting is disabled for accurate typing test results!');
+});
+
+
+
